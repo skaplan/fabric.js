@@ -1,45 +1,48 @@
 /*! Fabric.js Copyright 2008-2015, Printio (Juriy Zaytsev, Maxim Chernyak) */
 
-var fabric = fabric || { version: '2.3.1' };
-if (typeof exports !== 'undefined') {
+var fabric = fabric || { version: "2.3.1" };
+if (typeof exports !== "undefined") {
   exports.fabric = fabric;
-}
+} else if (typeof define === "function" && define.amd) {
 /* _AMD_START_ */
-else if (typeof define === 'function' && define.amd) {
-  define([], function() { return fabric; });
+  define([], function() {
+    return fabric;
+  });
 }
 /* _AMD_END_ */
-if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+if (typeof document !== "undefined" && typeof window !== "undefined") {
   fabric.document = document;
   fabric.window = window;
-}
-else {
+} else {
   // assume we're running under node.js when document/window are not present
-  fabric.document = require('jsdom')
-    .jsdom(
-      decodeURIComponent('%3C!DOCTYPE%20html%3E%3Chtml%3E%3Chead%3E%3C%2Fhead%3E%3Cbody%3E%3C%2Fbody%3E%3C%2Fhtml%3E'),
-      { features: {
-        FetchExternalResources: ['img']
+  fabric.document = require("jsdom").jsdom(
+    decodeURIComponent(
+      "%3C!DOCTYPE%20html%3E%3Chtml%3E%3Chead%3E%3C%2Fhead%3E%3Cbody%3E%3C%2Fbody%3E%3C%2Fhtml%3E"
+    ),
+    {
+      features: {
+        FetchExternalResources: ["img"]
       }
-      });
-  fabric.jsdomImplForWrapper = require('jsdom/lib/jsdom/living/generated/utils').implForWrapper;
-  fabric.nodeCanvas = require('jsdom/lib/jsdom/utils').Canvas;
+    }
+  );
+  fabric.jsdomImplForWrapper = require("jsdom/lib/jsdom/living/generated/utils").implForWrapper;
+  fabric.nodeCanvas = require("react-native-canvas");
   fabric.window = fabric.document.defaultView;
-  DOMParser = require('xmldom').DOMParser;
+  DOMParser = require("xmldom").DOMParser;
 }
 
 /**
  * True when in environment that supports touch events
  * @type boolean
  */
-fabric.isTouchSupported = 'ontouchstart' in fabric.window;
+fabric.isTouchSupported = "ontouchstart" in fabric.window;
 
 /**
  * True when in environment that's probably Node.js
  * @type boolean
  */
-fabric.isLikelyNode = typeof Buffer !== 'undefined' &&
-                      typeof window === 'undefined';
+fabric.isLikelyNode =
+  typeof Buffer !== "undefined" && typeof window === "undefined";
 
 /* _FROM_SVG_START_ */
 /**
@@ -49,12 +52,19 @@ fabric.isLikelyNode = typeof Buffer !== 'undefined' &&
 fabric.SHARED_ATTRIBUTES = [
   "display",
   "transform",
-  "fill", "fill-opacity", "fill-rule",
+  "fill",
+  "fill-opacity",
+  "fill-rule",
   "opacity",
-  "stroke", "stroke-dasharray", "stroke-linecap",
-  "stroke-linejoin", "stroke-miterlimit",
-  "stroke-opacity", "stroke-width",
-  "id", "paint-order",
+  "stroke",
+  "stroke-dasharray",
+  "stroke-linecap",
+  "stroke-linejoin",
+  "stroke-miterlimit",
+  "stroke-opacity",
+  "stroke-width",
+  "id",
+  "paint-order",
   "instantiated_by_use"
 ];
 /* _FROM_SVG_END_ */
@@ -63,10 +73,10 @@ fabric.SHARED_ATTRIBUTES = [
  * Pixel per Inch as a default value set to 96. Can be changed for more realistic conversion.
  */
 fabric.DPI = 96;
-fabric.reNum = '(?:[-+]?(?:\\d+|\\d*\\.\\d+)(?:e[-+]?\\d+)?)';
-fabric.fontPaths = { };
+fabric.reNum = "(?:[-+]?(?:\\d+|\\d*\\.\\d+)(?:e[-+]?\\d+)?)";
+fabric.fontPaths = {};
 fabric.iMatrix = [1, 0, 0, 1, 0, 0];
-fabric.canvasModule = 'canvas';
+fabric.canvasModule = "canvas";
 
 /**
  * Pixel limit for cache canvases. 1Mpx , 4Mpx should be fine.
@@ -95,7 +105,7 @@ fabric.minCacheSideLimit = 256;
 /**
  * Cache Object for widths of chars in text rendering.
  */
-fabric.charWidthsCache = { };
+fabric.charWidthsCache = {};
 
 /**
  * if webgl is enabled and available, textureSize will determine the size
@@ -120,10 +130,11 @@ fabric.enableGLFiltering = true;
  * Device Pixel Ratio
  * @see https://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/HTML-canvas-guide/SettingUptheCanvas/SettingUptheCanvas.html
  */
-fabric.devicePixelRatio = fabric.window.devicePixelRatio ||
-                          fabric.window.webkitDevicePixelRatio ||
-                          fabric.window.mozDevicePixelRatio ||
-                          1;
+fabric.devicePixelRatio =
+  fabric.window.devicePixelRatio ||
+  fabric.window.webkitDevicePixelRatio ||
+  fabric.window.mozDevicePixelRatio ||
+  1;
 /**
  * Browser-specific constant to adjust CanvasRenderingContext2D.shadowBlur value,
  * which is unitless and not rendered equally across browsers.
@@ -141,11 +152,14 @@ fabric.devicePixelRatio = fabric.window.devicePixelRatio ||
 fabric.browserShadowBlurConstant = 1;
 
 fabric.initFilterBackend = function() {
-  if (fabric.enableGLFiltering && fabric.isWebglSupported && fabric.isWebglSupported(fabric.textureSize)) {
-    console.log('max texture size: ' + fabric.maxTextureSize);
-    return (new fabric.WebglFilterBackend({ tileSize: fabric.textureSize }));
-  }
-  else if (fabric.Canvas2dFilterBackend) {
-    return (new fabric.Canvas2dFilterBackend());
+  if (
+    fabric.enableGLFiltering &&
+    fabric.isWebglSupported &&
+    fabric.isWebglSupported(fabric.textureSize)
+  ) {
+    console.log("max texture size: " + fabric.maxTextureSize);
+    return new fabric.WebglFilterBackend({ tileSize: fabric.textureSize });
+  } else if (fabric.Canvas2dFilterBackend) {
+    return new fabric.Canvas2dFilterBackend();
   }
 };

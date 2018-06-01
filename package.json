@@ -20,17 +20,6 @@
     "HTML5",
     "object model"
   ],
-  "browser": {
-    "canvas": false,
-    "fs": false,
-    "jsdom": false,
-    "jsdom/lib/jsdom/living/generated/utils": false,
-    "jsdom/lib/jsdom/utils": false,
-    "http": false,
-    "https": false,
-    "xmldom": false,
-    "url": false
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kangax/fabric.js"
@@ -55,9 +44,9 @@
     "testem": "testem .",
     "testem:ci": "testem ci"
   },
-  "optionalDependencies": {
-    "canvas": "1.6.x",
-    "jsdom": "9.x.x",
+  "dependencies": {
+    "jsdom": "^9.12.0",
+    "react-native-canvas": "^0.1.21",
     "xmldom": "0.1.x"
   },
   "devDependencies": {
